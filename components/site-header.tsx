@@ -12,14 +12,12 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 
 export function SiteHeader() {
+
   const pathname = usePathname()
-
-  if (pathname.startsWith("/studio")) return null
   const router = useRouter()
-
   const searchParams = useSearchParams()
 
-  // const { cartCount } = useShoppingCart()
+  const { cartCount } = useShoppingCart()
 
   const defaultSearchQuery = searchParams.get("search") ?? ""
 
@@ -29,6 +27,7 @@ export function SiteHeader() {
     const searchQuery = formData.get("search")
     router.replace(`/?search=${searchQuery}`)
   }
+  if (pathname.startsWith("/studio")) return null
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between space-x-4 px-6 sm:space-x-0">
@@ -48,14 +47,13 @@ export function SiteHeader() {
           <Link href="/cart">
             <Button size="sm" variant="ghost">
               <ShoppingBag className="h-5 w-5" />
-              <span className="ml-2 text-sm font-bold">0</span>
+              <span className="ml-2 text-sm font-bold">{cartCount}</span>
               <span className="sr-only">Cart</span>
             </Button>
           </Link>
-          {/* <h1>Hello</h1> */}
           <ThemeToggle />
           {
-            process.env.NEXT_PUBLIC_SANITY_DATASET === "production" && (
+            process.env.NEXT_PUBLIC_SANITY_DATASET !== "production" && (
               <Link href={"/studio"}>
                 <Button size={"sm"} variant="ghost">
                   <Edit className="h-5 w-5" />
